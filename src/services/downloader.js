@@ -89,9 +89,14 @@ async function extract_metadata(url) {
     '--dump-json',
     '--no-playlist',
     '--no-warnings',
-    '--socket-timeout', '30',
-    url
+    '--socket-timeout', '30'
   ];
+
+  if (process.env.PROXY_URL) {
+    args.push('--proxy', process.env.PROXY_URL);
+  }
+
+  args.push(url);
 
   try {
     const { stdout } = await run_yt_dlp(args);
@@ -120,6 +125,10 @@ async function download_file(url, downloads_dir, format, isMp3) {
     '--socket-timeout', '30',
     '-o', outtmpl
   ];
+
+  if (process.env.PROXY_URL) {
+    args.push('--proxy', process.env.PROXY_URL);
+  }
 
   // Try to use ffmpeg if available in path for merging (e.g. reddit/youtube video + audio)
   // If not available, we can't force it, yt-dlp will fallback to best pre-merged format or fail.
