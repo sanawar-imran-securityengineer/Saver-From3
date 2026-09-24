@@ -10,7 +10,19 @@ const YT_DLP_PATH = process.platform === 'win32'
   : path.join(BIN_DIR, 'yt-dlp');
 
 // Fallback to global yt-dlp if local binary doesn't exist
-const getBinaryPath = () => fs.existsSync(YT_DLP_PATH) ? YT_DLP_PATH : 'yt-dlp';
+const getBinaryPath = () => {
+  if (fs.existsSync(YT_DLP_PATH)) {
+    try {
+      if (process.platform !== 'win32') {
+        fs.chmodSync(YT_DLP_PATH, 0o755);
+      }
+    } catch (err) {
+      console.warn('Could not chmod yt-dlp:', err);
+    }
+    return YT_DLP_PATH;
+  }
+  return 'yt-dlp';
+};
 
 // URL validation to prevent SSRF
 function is_valid_url(url_string) {
