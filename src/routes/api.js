@@ -79,6 +79,58 @@ router.post('/api/v1/download', apiLimiter, async (req, res) => {
   }
 
   try {
+    if (platform_key === 'tiktok') {
+      try {
+        const fetchJson = (apiUrl) => new Promise((resolve, reject) => {
+          https.get(apiUrl, (resp) => {
+            let data = '';
+            resp.on('data', chunk => data += chunk);
+            resp.on('end', () => resolve(JSON.parse(data)));
+          }).on('error', reject);
+        });
+        const tikwmData = await fetchJson(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+        
+        if (tikwmData.code === 0 && tikwmData.data) {
+          const { title, cover, duration, author, play, music } = tikwmData.data;
+          const isMp3 = requestedFormat === 'mp3';
+          const directUrl = isMp3 ? music : play;
+          const ext = isMp3 ? 'mp3' : 'mp4';
+          
+          const formatsPayload = spec.option_pairs.map(([val, label]) => ({
+            format_id: val,
+            quality: label,
+            ext: val === 'mp3' ? 'mp3' : 'mp4',
+            url: val === 'mp3' ? music : play,
+            is_selected: val === requestedFormat
+          }));
+
+          return res.json({
+            success: true,
+            platform: spec.key,
+            platform_name: spec.name,
+            title: title || `${spec.name} media`,
+            thumbnail: cover,
+            duration: duration ? `${Math.floor(duration / 60)}:${('0' + (duration % 60)).slice(-2)}` : null,
+            uploader: author ? author.nickname : "",
+            view_count: null,
+            download_url: directUrl,
+            url: directUrl,
+            stream_url: directUrl,
+            filename: `${(title || 'tiktok').replace(/[^a-zA-Z0-9]/g, '_')}.${ext}`,
+            quality: requestedFormat,
+            format: isMp3 ? "MP3 Audio" : "MP4 Video",
+            extension: ext,
+            formats: formatsPayload,
+            extractor: "tikwm-api",
+            source_url: url,
+            server_download_required: false
+          });
+        }
+      } catch (err) {
+        console.warn('Tikwm API failed, falling back to yt-dlp:', err);
+      }
+    }
+
     const info = await extract_metadata(url);
     const title = info.title || `${spec.name} media`;
     const thumbnail = info.thumbnail || info.thumbnails?.[0]?.url;
