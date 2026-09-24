@@ -11,7 +11,7 @@
   // - Pinterest: CDN blocks proxied requests
   // - Facebook: separate audio+video — needs FFmpeg merge
   var SERVER_DOWNLOAD_PLATFORMS = [
-    "youtube", "tiktok", "instagram", "reddit", "threads", "pinterest", "facebook"
+    "youtube", "instagram", "reddit", "threads", "pinterest", "facebook"
   ];
 
   function errorText(data, fallback) {
