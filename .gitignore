@@ -1,5 +1,5 @@
 node_modules/
 downloads/
-bin/
 .env
-.DS_Store__pycache__/
+.DS_Store
+__pycache__/
