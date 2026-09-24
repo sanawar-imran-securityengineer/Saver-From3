@@ -1,0 +1,44 @@
+INFO:     127.0.0.1:51033 - "GET /api/openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51035 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51034 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51045 - "GET /pages/youtube.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51046 - "GET /api/v1/detect?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51047 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51045 - "GET /pages/tiktok.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51045 - "GET /youtube HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51045 - "GET /instagram HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51045 - "GET /static/css/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51045 - "GET /static/icons/youtube.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51045 - "GET /api/docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51059 - "GET /api/openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51065 - "POST /api/v1/detect HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51066 - "GET /api/youtube/info?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51105 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51116 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37475 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41631 - "GET /api/v1/proxy-download?url=https%3a%2f%2frr4---sn-f5uxxo23-aixs.googlevideo.com%2fvideoplayback%3fexpire%3d1789865707%26ei%3di9quaunlEa7Fv_IPjZvWuAI%26ip%3d110.38.183.28%26id%3do-AJyRnkgJKynHWeZgkCZGOKlSaz_4b67cn3sHxHrmJRyK%26itag%3d18%26source%3dyoutube%26requiressl%3dyes%26xpc%3dEgVo2aDSNQ%253D%253D%26cps%3d1244%26met%3d1789844107%252C%26mh%3d7c%26mm%3d18%252C29%26mn%3dsn-f5uxxo23-aixs%252Csn-hgn7rne7%26ms%3daub%252Crdu%26mv%3dm%26mvi%3d4%26pl%3d24%26rms%3daub%252Caub%26initcwndbps%3d307500%26bui%3dAR3QkAk7fjip7SotxDkq61bSDzReEpXepOglKvOolF7d-jsW4ogZVqvUUwm9lM2f8eUQ7NkzZCl03zgO%26spc%3dI-rgIXpbeI4DojrD2vfn6Z2gtKN3NAVaUWHPh6WB5hIHUzr1GYyWJTw3YaM0rgBVjORN_IuBCbU%26vprv%3d1%26svpuc%3d1%26mime%3dvideo%252Fmp4%26rqh%3d1%26cnr%3d14%26ratebypass%3dyes%26dur%3d213.089%26lmt%3d1766960953317159%26mt%3d1789843719%26fvip%3d2%26fexp%3d51565115%252C52112905%252C52178455%26c%3dANDROID%26txp%3d5538534%26sparams%3dexpire%252Cei%252Cip%252Cid%252Citag%252Csource%252Crequiressl%252Cxpc%252Cbui%252Cspc%252Cvprv%252Csvpuc%252Cmime%252Crqh%252Ccnr%252Cratebypass%252Cdur%252Clmt%26sig%3dAE0s2JYwRQIgBf8cYgZrsCQsyscSNuqFc-0y3fTPREXG-BFLMN-O_HICIQDkWkUmpJu8VLiCzvP4owx0CrIA-Lts3FGIbRDep_Vi4A%253D%253D%26lsparams%3dcps%252Cmet%252Cmh%252Cmm%252Cmn%252Cms%252Cmv%252Cmvi%252Cpl%252Crms%252Cinitcwndbps%26lsig%3dAPaTxxMwRQIgSsDxhJ_IfYgjStw64QurNAXRu3MXnmv79ztKJeOPMyUCIQCa9u0fywnnr-sXLnGaDyvnXX3YtYRNlskvQUKyloDgZg%253D%253D&filename=test.mp4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:30038 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:30038 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45476 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37017 - "GET /static/icons/tiktok.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12206 - "GET /static/icons/instagram.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53896 - "GET /static/icons/facebook.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64008 - "GET /static/icons/youtube.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:45476 - "GET /static/icons/saverfrom-logo.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:26025 - "GET /static/css/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12206 - "GET /static/icons/twitter.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53896 - "GET /static/icons/snapchat.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64008 - "GET /static/icons/pinterest.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37017 - "GET /static/icons/threads.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53896 - "GET /static/icons/twitch.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:45476 - "GET /static/icons/reddit.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:11993 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:11993 - "GET /api/v1/proxy-download?url=https%3A%2F%2Finstagram.flhe6-1.fna.fbcdn.net%2Fo1%2Fv%2Ft2%2Ff2%2Fm86%2FAQOKNVsK8mUyZFSpFoaJAqBbQrmgU7rfUl1trJDxNLUT7MfKA4t87RfyxJihjj9VX6ANsg851rSnaMMmTGR8swQxSwZ0_235y9A2XoY.mp4%3F_nc_cat%3D106%26_nc_oc%3DAdpojYeCvZD8LixYM13DukXzwePdYISN4kcP6YB4kcRxTLf_O1sJiWby9_gnZU0sS-k%26_nc_sid%3D9ca052%26_nc_ht%3Dinstagram.flhe6-1.fna.fbcdn.net%26_nc_ohc%3Dfyk-vlZdIy4Q7kNvwHDqzx6%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImlnLXhwdmRzLmNsaXBzLmlnd3d3LUMzLmRhc2hfYmFzZWxpbmVfMV92MSIsInZpZGVvX2lkIjpudWxsLCJvaWxfdXJsZ2VuX2FwcF9pZCI6OTM2NjE5NzQzMzkyNDU5LCJjbGllbnRfbmFtZSI6ImlnIiwieHB2X2Fzc2V0X2lkIjoxNzc4NTU1Mzg2NjYyMTEwLCJhc3NldF9hZ2VfZGF5cyI6NDMsInZpX3VzZWNhc2VfaWQiOjEwMDk5LCJkdXJhdGlvbl9zIjo5NSwiYml0cmF0ZSI6OTE2NzExLCJ1cmxnZW5fc291cmNlIjoid3d3In0%253D%26ccb%3D17-1%26_nc_gid%3DDVhYPdvgLix3KwxM1hGJCw%26_nc_ss%3D7ba8c%26_nc_map%3Durlgen_bucketless%26_nc_zt%3D28%26oh%3D00_AQJkyRCx4CGs8ojYm1n9gABD2m39cnI8jS-hI13lpQEV0w%26oe%3D6AB0C9C3&filename=Video%20by%20theianchristianson.mp4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39337 - "GET /pages/instagram.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39337 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39337 - "GET /api/v1/proxy-download?url=https%3A%2F%2Finstagram.flhe6-1.fna.fbcdn.net%2Fo1%2Fv%2Ft2%2Ff2%2Fm86%2FAQOKNVsK8mUyZFSpFoaJAqBbQrmgU7rfUl1trJDxNLUT7MfKA4t87RfyxJihjj9VX6ANsg851rSnaMMmTGR8swQxSwZ0_235y9A2XoY.mp4%3F_nc_cat%3D106%26_nc_oc%3DAdpojYeCvZD8LixYM13DukXzwePdYISN4kcP6YB4kcRxTLf_O1sJiWby9_gnZU0sS-k%26_nc_sid%3D9ca052%26_nc_ht%3Dinstagram.flhe6-1.fna.fbcdn.net%26_nc_ohc%3Dfyk-vlZdIy4Q7kNvwHDqzx6%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImlnLXhwdmRzLmNsaXBzLmlnd3d3LUMzLmRhc2hfYmFzZWxpbmVfMV92MSIsInZpZGVvX2lkIjpudWxsLCJvaWxfdXJsZ2VuX2FwcF9pZCI6OTM2NjE5NzQzMzkyNDU5LCJjbGllbnRfbmFtZSI6ImlnIiwieHB2X2Fzc2V0X2lkIjoxNzc4NTU1Mzg2NjYyMTEwLCJhc3NldF9hZ2VfZGF5cyI6NDMsInZpX3VzZWNhc2VfaWQiOjEwMDk5LCJkdXJhdGlvbl9zIjo5NSwiYml0cmF0ZSI6OTE2NzExLCJ1cmxnZW5fc291cmNlIjoid3d3In0%253D%26ccb%3D17-1%26_nc_gid%3DDVhYPdvgLix3KwxM1hGJCw%26_nc_ss%3D7ba8c%26_nc_map%3Durlgen_bucketless%26_nc_zt%3D28%26oh%3D00_AQJkyRCx4CGs8ojYm1n9gABD2m39cnI8jS-hI13lpQEV0w%26oe%3D6AB0C9C3&filename=Video%20by%20theianchristianson.mp4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:18878 - "GET /tiktok HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:18878 - "GET /pages/tiktok.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:18878 - "POST /api/v1/download HTTP/1.1" 200 OK
+INFO:     127.0.0.1:18878 - "GET /api/v1/proxy-download?url=https%3A%2F%2Fv19.tiktokcdn-us.com%2F14f0ffecaa79775103eda49065b49f7b%2F6aaf3332%2Fvideo%2Ftos%2Falisg%2Ftos-alisg-pve-0037c001%2FoInCmlQUGiXJAAqjoz6mI4wKRiIvfArBEs6Qgp%2F%3Fa%3D1233%26bti%3DOUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg%26%26bt%3D939%26ft%3D74~WHDDwN4vVQQdGuIOnsdaOtKZqYlq1dd2jhWLrK%26mime_type%3Dvideo_mp4%26rc%3DOTc7OGk7N2k3aTk4PGg0NEBpamU0PHQ5cm1odjMzODczNEBhYzRjMDNeXzUxLy0zNDBeYSMxY2kwMmRjZWpgLS1kMTFzcw%253D%253D%26vvpl%3D1%26l%3D202609191911509388CFE7FA875F4E1BB6%26btag%3De000d0000&filename=Latest%20Bayan%20Highlights%20at%20Chowki%20Heraj%20by%20Molana%20Tariq%20Jami.mp4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60223 - "POST /api/v1/download HTTP/1.1" 200 OK

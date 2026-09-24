@@ -1,13 +1,20 @@
 {
-  "name": "saver-from-root",
+  "name": "video-downloader-backend",
   "version": "1.0.0",
-  "description": "Static HTML site",
-  "private": true,
-  "scripts": {
-    "build": "echo \"No build step needed\"",
-    "start": "echo \"Static site - no server needed\""
+  "description": "Node.js Express backend for multi-platform video downloader",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0"
+  }
 }
