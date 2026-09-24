@@ -553,7 +553,7 @@
           downloadData = await dlResp.json();
         } else {
           const errData = await dlResp.json().catch(() => ({}));
-          throw new Error(errData.detail || 'Download request failed.');
+          throw new Error(errData.message || errData.detail || 'Download request failed.');
         }
 
         loadingBox.style.display = 'none';
