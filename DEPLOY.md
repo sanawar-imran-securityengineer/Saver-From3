@@ -32,10 +32,42 @@ Yeh guide apko batayegi ke is Node.js Express based Video Downloader ko Hostinge
 2. Express app khud HTTP se HTTPS par redirect karti hai. Canonical URLs (www vs non-www) ko bhi cPanel/hPanel ke redirects se set kiya ja sakta hai agar zaroorat mehsoos ho.
 
 ## Troubleshooting (Masle aur Hal)
-1. **EACCES Error**: Agar `yt-dlp` chalne par Permission Denied ka error aata hai, to iska matlab binary executable nahi hai. SSH se login karke app root folder mein `chmod +x bin/yt-dlp` run karein.
-2. **App Crash ho rahi hai**: Hostinger Node.js app logs (e.g. `stderr.log` ya `server.log`) ko check karein. Agar Hostinger memory limit cross kar deta hai, to VPS ya Render/Railway par host karne ka sochein.
-3. **Downloads Fail / Timeout**: Shared hosting par aksar background processes ki execution limit 30 ya 60 seconds hoti hai. Agar large file yt-dlp ke through merge aur download ho rahi ho aur server us process ko kill kar de, to iska koi fix shared hosting par nahi hai siwaye limits badhane ki request karne ke. `yt-dlp` FFmpeg ke baghair merging nahi kar sakta. Agar Hostinger par FFmpeg available nahi hai, to app best single-file format degi (jaise video without sound ya alag audio) MP4 ke liye jo without merging ho. 
-4. **Proxy Download Error**: Agar Hostinger remote proxy-stream block kare, to frontend par direct file link ka fallback option use karna padega.
+
+### Internet pe download block / fail (localhost pe theek tha)
+Sabse common problem. Wajah:
+- YouTube / Instagram / Facebook shared hosting IP ko bot samajh kar block kar dete hain
+- Pehle high concurrency (64-128 parallel connections) IP ban trigger karti thi
+- FFmpeg missing hone se merge fail
+
+**Is version mein already laga diye gaye fixes:**
+- Production mode mein concurrency 4 tak limited
+- Realistic browser User-Agent + headers
+- Progressive formats prefer (bina FFmpeg ke bhi kaam)
+- Better proxy Referer / Origin headers
+
+**Hostinger pe zaroori:**
+1. Root folder mein `.env` banao:
+```
+ENVIRONMENT=production
+DEBUG=false
+CORS_ORIGINS=*
+DOWNLOADS_DIR=/home/YOUR_USER/domains/YOURDOMAIN.com/downloads
+```
+2. `downloads` folder banao (permissions 755)
+3. Python app Restart karo
+4. `pip install -U yt-dlp`
+
+### EACCES / Permission Denied
+Binary pe `chmod +x`, ya downloads folder writable nahi.
+
+### App Crash / Timeout
+Shared hosting 30-60s limit. Large videos ke liye VPS behtar.
+
+### FFmpeg nahi hai
+Shared pe aksar nahi milta. Ab progressive single-file formats prefer hote hain. High quality merge ke liye VPS + `apt install ffmpeg`.
 
 ## Important Note for Shared Hosting
-Shared hosting Node.js apps ke liye lambay processes chalane ke liye nahi bani. Agar apko CPU/Memory timeouts aate hain kyunke yt-dlp (Khas tor par Instagram/Reddit/YouTube) resources consume karta hai, tab behtar hai backend ko Railway (railway.app) ya kisi VPS par chalayein aur usay apne Hostinger frontend se link kar dein.
+Shared hosting long yt-dlp processes ke liye ideal nahi. Agar phir bhi IP block / timeout aaye:
+- Backend Railway / Render / VPS pe chalao
+- Frontend Hostinger pe rakho
+- Ya pure project Hostinger VPS pe deploy karo (`deploy/hostinger_instructions.md`)
