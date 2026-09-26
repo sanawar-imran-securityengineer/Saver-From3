@@ -42,8 +42,9 @@ class Settings(BaseSettings):
     MAX_FILE_SIZE_MB: int = 500
     DOWNLOAD_TIMEOUT_SECONDS: int = 600  # big HD videos from IG/Reddit need more time
     FILE_TTL_MINUTES: int = 30
-    MAX_CONCURRENT_DOWNLOADS: int = 8   # more parallel downloads = less queueing
-    MAX_RETRIES: int = 1                 # fewer retries = faster failure on bad URLs
+    # Keep low on shared hosting — many parallel yt-dlp jobs = IP bans + OOM
+    MAX_CONCURRENT_DOWNLOADS: int = 3
+    MAX_RETRIES: int = 2
     CLEANUP_INTERVAL_SECONDS: int = 60
 
     # ── Metadata cache (in-process, used by the unified endpoint) ─────────────
@@ -77,6 +78,12 @@ class Settings(BaseSettings):
     # Point this at a folder that contains ffmpeg/ffprobe if they are not on
     # the system PATH.  Example: /home/u123456/ffmpeg/bin
     FFMPEG_LOCATION: str = ""
+
+    # ── YouTube cookies (fixes "Sign in to confirm you're not a bot") ──────────
+    # Export cookies.txt from a logged-in browser (Get cookies.txt LOCALLY extension)
+    # and set the absolute path. Free — no API key needed.
+    #   COOKIES_FILE=/home/u123456/domains/example.com/cookies.txt
+    COOKIES_FILE: str = ""
 
     # ── Validators / helpers ──────────────────────────────────────────────────
     @field_validator("DOWNLOADS_DIR", mode="before")
