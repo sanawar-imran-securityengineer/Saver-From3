@@ -12,91 +12,100 @@ logger = logging.getLogger("saverfrom.extractors.ytdlp")
 
 
 def _platform_overrides(spec: Optional[PlatformSpec]) -> Dict[str, Any]:
-    """Per-platform yt-dlp tweaks that measurably improve success rate."""
+    """Per-platform yt-dlp tweaks. Production uses low concurrency to avoid IP bans."""
+    from ..utils.config import settings
+
     if spec is None:
         return {}
+
+    is_prod = settings.is_production
+    # Shared / datacenter IPs get blocked when opening dozens of parallel connections
+    conc = 4 if is_prod else 16
+    buf = 8 * 1024 * 1024 if is_prod else 16 * 1024 * 1024
+    chunk = 4 * 1024 * 1024 if is_prod else 10 * 1024 * 1024
+
     if spec.key == "youtube":
-        # Android + tv_embedded clients give the fastest CDN URLs and bypass throttle.
+        # Prefer progressive clients. android can be blocked on some DCs — keep web fallbacks.
         return {
             "extractor_args": {
                 "youtube": {
-                    "player_client": ["android", "tv_embedded", "web_embedded"],
-                    "skip": ["hls", "dash"],      # prefer direct HTTP streams
+                    "player_client": ["android", "ios", "web", "tv_embedded"],
+                    "player_skip": ["webpage", "configs"],
                 }
             },
-            "socket_timeout": 8,
-            "concurrent_fragment_downloads": 128,  # max parallel for HTTP-chunked
-            "buffersize": 33554432,                # 32 MB buffer — avoids stall on large chunks
-            "http_chunk_size": 20971520,            # 20 MB chunk requests
+            "socket_timeout": 25 if is_prod else 12,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
+            "http_chunk_size": chunk,
+            "retries": 3 if is_prod else 1,
+            "extractor_retries": 3 if is_prod else 1,
         }
     if spec.key in ("instagram", "facebook", "threads"):
-        # Facebook/Instagram/Threads: use crawler UA + max parallel DASH segments.
+        # Real browser UA works better from public IPs than the crawler UA
+        # (crawler UA is often blocked or rate-limited on shared hosts).
         return {
             "http_headers": {
-                "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+                ),
                 "Accept-Language": "en-US,en;q=0.9",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Referer": "https://www.instagram.com/" if spec.key == "instagram" else "https://www.facebook.com/",
+                "Origin": "https://www.instagram.com" if spec.key == "instagram" else "https://www.facebook.com",
             },
-            "concurrent_fragment_downloads": 128,  # max DASH segment workers
-            "socket_timeout": 15,
-            "fragment_retries": 2,
-            "buffersize": 33554432,                # 32 MB — FB CDN sends large segments
-            "http_chunk_size": 20971520,
+            "concurrent_fragment_downloads": conc,
+            "socket_timeout": 25 if is_prod else 15,
+            "fragment_retries": 3 if is_prod else 2,
+            "buffersize": buf,
+            "http_chunk_size": chunk,
+            "retries": 3 if is_prod else 1,
         }
     if spec.key == "reddit":
-        # v.redd.it DASH: separate a/v streams — max workers to fetch in parallel.
         return {
-            "socket_timeout": 12,
-            "fragment_retries": 2,
-            "concurrent_fragment_downloads": 128,
-            "buffersize": 33554432,
-            "http_chunk_size": 20971520,
+            "socket_timeout": 20 if is_prod else 12,
+            "fragment_retries": 3 if is_prod else 2,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
+            "http_chunk_size": chunk,
         }
     if spec.key == "pinterest":
-        # Pinterest CDN: force yt-dlp to use the generic extractor so video URLs
-        # hidden in JSON-LD / og:video tags are found when the Pinterest extractor
-        # fails.  Also raise concurrency and buffer size for speed.
         return {
             "extractor_args": {
-                "pinterest": {
-                    "locale": ["en"],   # English locale avoids geo-redirect errors
-                },
+                "pinterest": {"locale": ["en"]},
             },
-            "socket_timeout": 12,
-            "fragment_retries": 2,
-            "concurrent_fragment_downloads": 128,
-            "buffersize": 33554432,
-            "http_chunk_size": 20971520,
-            "nocheckcertificate": True,  # some Pinterest CDN nodes have cert issues
+            "socket_timeout": 20 if is_prod else 12,
+            "fragment_retries": 3 if is_prod else 2,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
+            "http_chunk_size": chunk,
+            "nocheckcertificate": True,
         }
     if spec.key == "tiktok":
-        # yt-dlp fallback for TikTok (tikwm is the primary extractor).
         return {
             "format": "best[ext=mp4]/best",
-            "socket_timeout": 10,
-            "concurrent_fragment_downloads": 64,
-            "buffersize": 16777216,
+            "socket_timeout": 20 if is_prod else 10,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
         }
     if spec.key == "twitch":
-        # Twitch VODs/clips use HLS — max parallel segment downloads for speed.
         return {
-            "socket_timeout": 10,
-            "concurrent_fragment_downloads": 64,
+            "socket_timeout": 20 if is_prod else 10,
+            "concurrent_fragment_downloads": conc,
             "fragment_retries": 3,
-            "buffersize": 16777216,
+            "buffersize": buf,
         }
     if spec.key == "twitter":
-        # Twitter/X video — can have multiple quality streams.
         return {
-            "socket_timeout": 10,
-            "concurrent_fragment_downloads": 64,
-            "buffersize": 16777216,
+            "socket_timeout": 20 if is_prod else 10,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
         }
     if spec.key == "snapchat":
         return {
-            "socket_timeout": 10,
-            "concurrent_fragment_downloads": 64,
-            "buffersize": 16777216,
+            "socket_timeout": 20 if is_prod else 10,
+            "concurrent_fragment_downloads": conc,
+            "buffersize": buf,
         }
     return {}
 
