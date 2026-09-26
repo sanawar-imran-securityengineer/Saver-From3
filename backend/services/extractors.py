@@ -28,30 +28,73 @@ from ..utils.config import settings
 
 logger = logging.getLogger("saverfrom.extractors")
 
-BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+# Realistic desktop Chrome UA — datacenter IPs get blocked faster with bot/crawler UAs
+BROWSER_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+)
 FACEBOOK_BOT_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+
+# Rotate through a small set of common desktop UAs so consecutive requests
+# from the same server IP look less like a single automated client.
+_UA_POOL = [
+    BROWSER_UA,
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+]
+
+
+def _pick_ua() -> str:
+    import random
+    return random.choice(_UA_POOL)
 
 
 def _ytdlp_base_opts() -> Dict[str, Any]:
-    return {
+    """Base yt-dlp options tuned for public/shared hosting (anti-block).
+
+    High concurrency (64–128) from a datacenter IP looks like a scraper and
+    gets rate-limited or blocked. Keep concurrency low in production.
+    """
+    from pathlib import Path
+    from ..utils.config import settings
+
+    is_prod = settings.is_production
+    opts: Dict[str, Any] = {
         "quiet": True,
         "no_warnings": True,
         "noprogress": True,
         "no_color": True,
         "skip_download": True,
         "noplaylist": True,
-        "socket_timeout": 10,          # fast fail — don't hang on dead connections
-        "retries": 1,
-        "extractor_retries": 1,
-        "fragment_retries": 1,
-        "concurrent_fragment_downloads": 32,  # high parallel fetches for metadata
+        "socket_timeout": 20 if is_prod else 12,
+        "retries": 3 if is_prod else 1,
+        "extractor_retries": 2 if is_prod else 1,
+        "fragment_retries": 3 if is_prod else 1,
+        # Low concurrency on public IPs avoids bot detection / IP bans
+        "concurrent_fragment_downloads": 4 if is_prod else 16,
         "nocheckcertificate": True,
         "geo_bypass": True,
         "http_headers": {
-            "User-Agent": BROWSER_UA,
+            "User-Agent": _pick_ua(),
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Ch-Ua": '"Chromium";v="131", "Not_A Brand";v="24"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
         },
     }
+    # YouTube bot-check bypass: path to Netscape cookies.txt from a real browser
+    cookies = (getattr(settings, "COOKIES_FILE", None) or "").strip()
+    if cookies and Path(cookies).is_file():
+        opts["cookiefile"] = cookies
+    return opts
 
 
 # ────────────────────────────────────────────────────────────────────────────
